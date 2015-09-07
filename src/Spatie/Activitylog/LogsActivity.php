@@ -13,8 +13,11 @@ trait LogsActivity
 
                 $message = $model->getActivityDescriptionForEvent($eventName);
 
+                // Integration with lucadegasperi/oauth2-server-laravel
+                $user_id = \Authorizer::getChecker()->getAccessToken() ? \Authorizer::getResourceOwnerId() : false;
+
                 if ($message != '') {
-                    Activity::log($message);
+                    Activity::log($message, $user_id);
                 }
             });
         }
