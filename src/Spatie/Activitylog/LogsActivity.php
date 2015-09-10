@@ -10,14 +10,16 @@ trait LogsActivity
     {
         foreach (static::getRecordActivityEvents() as $eventName) {
             static::$eventName(function (LogsActivityInterface $model) use ($eventName) {
+                $activity = $model->getActivityDescriptionForEvent($eventName);
 
-                $message = $model->getActivityDescriptionForEvent($eventName);
+                $message = isset($activity['logs']) ? $activity['logs'] : '';
+                $attributes = isset($activity['attributes']) ? $activity['attributes'] : [];
 
                 // Integration with lucadegasperi/oauth2-server-laravel
                 $user_id = \Authorizer::getChecker()->getAccessToken() ? \Authorizer::getResourceOwnerId() : false;
 
                 if ($message != '') {
-                    Activity::log($message, $user_id);
+                    Activity::log($message, $user_id, $attributes);
                 }
             });
         }

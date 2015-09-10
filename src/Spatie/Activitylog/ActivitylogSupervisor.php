@@ -48,14 +48,17 @@ class ActivitylogSupervisor
      *
      * @return bool
      */
-    public function log($text, $userId = '')
+    public function log($text, $userId = '', $attributes = [])
     {
         $userId = $this->normalizeUserId($userId);
 
         $ipAddress = Request::getClientIp();
 
+        $log_attributes = count($attributes) ? $attributes : [];
+        $log_attributes['ipAddress'] = $ipAddress;
+
         foreach ($this->logHandlers as $logHandler) {
-            $logHandler->log($text, $userId, compact('ipAddress'));
+            $logHandler->log($text, $userId, $log_attributes);
         }
 
         return true;

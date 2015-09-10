@@ -22,6 +22,8 @@ class EloquentHandler implements ActivitylogHandlerInterface
             [
                 'text' => $text,
                 'user_id' => ($userId == '' ? null : $userId),
+                'model_id' => (isset($attributes['model_id']) ? $attributes['model_id'] : null),
+                'data_id' => (isset($attributes['data_id']) ? $attributes['data_id'] : null),
                 'ip_address' => $attributes['ipAddress'],
             ]
         );
